@@ -248,7 +248,90 @@ The following is how the Grant Type works in this application :
         }
 
 
+### Grant Type : Implicit
+
+The implicit grant type is used to obtain access tokens (it does not support the issuance 
+of refresh tokens) and is optimized for public clients known to operate a particular 
+redirection URI.  These clients are typically implemented in a browser using a scripting language 
+such as JavaScript.
+
+Since this is a redirection-based flow, the client must be capable of interacting with 
+the resource owner's user-agent (typically a web browser) and capable of receiving incoming 
+requests (via redirection) from the authorization server. Unlike the authorization code 
+grant type, in which the client makes separate requests for authorization and for an access 
+token, the client receives the access token as the result of the authorization request.
+
+The implicit grant type does not include client authentication, and relies on the presence 
+of the resource owner and the registration of the redirection URI.  Because the access token 
+is encoded into the redirection URI, it may be exposed to the resource owner and other 
+applications residing on the same device.
+
+     +----------+
+     | Resource |
+     |  Owner   |
+     |          |
+     +----------+
+          ^
+          |
+         (B)
+     +----|-----+          Client Identifier     +---------------+
+     |         -+----(A)-- & Redirection URI --->|               |
+     |  User-   |                                | Authorization |
+     |  Agent  -|----(B)-- User authenticates -->|     Server    |
+     |          |                                |               |
+     |          |<---(C)--- Redirection URI ----<|               |
+     |          |          with Access Token     +---------------+
+     |          |            in Fragment
+     |          |                                +---------------+
+     |          |----(D)--- Redirection URI ---->|   Web-Hosted  |
+     |          |          without Fragment      |     Client    |
+     |          |                                |    Resource   |
+     |     (F)  |<---(E)------- Script ---------<|               |
+     |          |                                +---------------+
+     +-|--------+
+       |    |
+      (A)  (G) Access Token
+       |    |
+       ^    v
+     +---------+
+     |         |
+     |  Client |
+     |         |
+     +---------+
+
+     Note:  The lines illustrating steps (A) and (B) are broken into two parts 
+            as they pass through the user-agent.
+
+   Figure 4: Implicit Grant Flow
+
+The following is how the Grant Type works in this application :
+
+* Generate random `state` variable :
+
+        curl http://localhost:8080/springmvc-oauth2-example/api/state/new
+    This state variable will be save as session attribute in server, we will use it for verification in next step.
+
+* Generate token with `state` variable :
+
+        curl http://localhost:8080/springmvc-oauth2-example/oauth/authorize?client_id=jsclient&response_type=token&scope=write&state=STATE
+
+* `auth-server` will redirected to login page.
+* Login with username=`admin` and password=`passw0rd`
+* After success login, `auth-server` will redirected to URL `http://localhost:8080/springmvc-oauth2-example/api/state/verify` with additinal hash token :
+    
+	`http://localhost:8080/springmvc-oauth2-example/api/state/verify#access_token=fdd3ed9d-f378-406b-9d23-13b36aad5128&token_type=bearer&state=d6b63cdb-bbf0-4232-b3a2-5855c1b12b1d&expires_in=86399`
+
+* Access protected resource :
+
+        curl http://localhost:8080/springmvc-oauth2-example/api/admin?access_token=fdd3ed9d-f378-406b-9d23-13b36aad5128
+	
+	And You can access it with header parameter as `Authorization` :
+
+        curl -H "Authorization: Bearer 667aadee-883c-439f-9f18-50ef77e3fad6" http://localhost:8080/springmvc-oauth2-example/api/admin
+
+
 ### References
 * [Spring Security Guides] (http://docs.spring.io/spring-security/site/docs/current/guides/html5/)
 * [Spring OAuth2 Developer Guide] (http://projects.spring.io/spring-security-oauth/docs/oauth2.html)
 * [IETF] (https://tools.ietf.org/html/rfc6749)
+* [Endy Muhardin Github Page] (https://github.com/endymuhardin/belajar-springoauth2)

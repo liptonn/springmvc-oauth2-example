@@ -25,6 +25,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.resourceId(AuthorizationServerConfig.RESOURCE_ID);
+        RemoteTokenServices tokenService = new RemoteTokenServices();
+        tokenService.setClientId("jsclient");
+        tokenService.setClientSecret("123456");
+        tokenService.setCheckTokenEndpointUrl("http://localhost:8080/springmvc-oauth2-example/oauth/check_token");
+
+        resources.resourceId(AuthorizationServerConfig.RESOURCE_ID).tokenServices(tokenService);
     }
 }

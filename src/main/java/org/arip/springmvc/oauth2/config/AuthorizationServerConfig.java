@@ -53,6 +53,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret("123456")
                 .authorizedGrantTypes("authorization_code", "refresh_token")
                 .scopes("read", "write")
-                .resourceIds(RESOURCE_ID);
+                .resourceIds(RESOURCE_ID)
+            .and()
+            .withClient("jsclient")
+                .secret("123456")
+                .authorizedGrantTypes("implicit")
+                .scopes("read", "write")
+                .resourceIds(RESOURCE_ID)
+                .authorities("CLIENT")
+                .redirectUris("http://localhost:8080/springmvc-oauth2-example/api/state/verify")
+                .accessTokenValiditySeconds(3600)
+                .autoApprove(true);
     }
 }

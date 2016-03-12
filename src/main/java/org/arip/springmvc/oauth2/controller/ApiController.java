@@ -66,4 +66,16 @@ public class ApiController {
 
         return result;
     }
+
+    @RequestMapping("/state/verify")
+    public Map<String, Object> verify(HttpSession session) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("success", Boolean.TRUE);
+
+        String state = (String) session.getAttribute("state");
+        result.put("state", state);
+        session.removeAttribute("state");
+
+        return result;
+    }
 }
