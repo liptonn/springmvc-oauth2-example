@@ -15,6 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.security.oauth2.version>2.0.8.RELEASE</spring.security.oauth2.version>
         <servlet.version>3.1.0</servlet.version>
+        <jsp.version>2.1</jsp.version>
         <tomcat.version>2.2</tomcat.version>
     </properties>
 
@@ -29,6 +30,13 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>${jsp.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

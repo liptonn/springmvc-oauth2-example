@@ -47,6 +47,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret("123456")
                 .authorizedGrantTypes("client_credentials")
                 .scopes("trust")
+                .resourceIds(RESOURCE_ID)
+            .and()
+            .withClient("clientauthcode")
+                .secret("123456")
+                .authorizedGrantTypes("authorization_code", "refresh_token")
+                .scopes("read", "write")
                 .resourceIds(RESOURCE_ID);
     }
 }
