@@ -42,4 +42,14 @@ public class ApiController {
 
         return result;
     }
+
+    @RequestMapping("/client")
+    public Map<String, Object> client(Principal user) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("success", Boolean.TRUE);
+        result.put("page", "client");
+        result.put("user", user.getName());
+
+        return result;
+    }
 }

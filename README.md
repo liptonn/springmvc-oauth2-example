@@ -54,13 +54,13 @@ for future use, by exchanging the credentials with a long-lived access token or 
      |         |    (w/ Optional Refresh Token)   |               |
      +---------+                                  +---------------+
      
-     Figure : Resource Owner Password Credentials Flow
+     Figure 1: Resource Owner Password Credentials Flow
 
 The following is how the Grant Type works in this application :
 
 * Request access token : 
 
-        curl -X POST -vu clientapp:123456 http://localhost:9091/auth-server/oauth/token -H "Accept: application/json" -d "client_id=clientapp&grant_type=password&username=admin&password=passw0rd" 
+        curl -X POST -vu clientapp:123456 http://localhost:8080/springmvc-oauth2-example/oauth/token -H "Accept: application/json" -d "client_id=clientapp&grant_type=password&username=admin&password=passw0rd" 
 
 * `auth-server` will give you JSON response with access token :
 
@@ -73,7 +73,7 @@ The following is how the Grant Type works in this application :
 
 * Access resource with header parameter : 
 
-        curl -H "Authorization: Bearer 9b3456a4-c5db-422e-a422-883a60bf1899" http://localhost:9092/resource-server/api/admin
+        curl -H "Authorization: Bearer 9b3456a4-c5db-422e-a422-883a60bf1899" http://localhost:8080/springmvc-oauth2-example/api/admin
 
 * `resource-server` will give JSON response :
 
@@ -82,6 +82,55 @@ The following is how the Grant Type works in this application :
 			"page":"admin",
 			"user":"admin"
 		}
+
+
+
+### Grant Type : Client Credentials
+
+The client can request an access token using only its client credentials (or other supported 
+means of authentication) when the client is requesting access to the protected resources 
+under its control, or those of another resource owner that have been previously arranged with 
+the authorization server (the method of which is beyond the scope of this specification).
+
+The client credentials grant type MUST only be used by confidential clients.
+
+     +---------+                                  +---------------+
+     |         |                                  |               |
+     |         |>--(A)- Client Authentication --->| Authorization |
+     | Client  |                                  |     Server    |
+     |         |<--(B)---- Access Token ---------<|               |
+     |         |                                  |               |
+     +---------+                                  +---------------+
+
+     Figure 2: Client Credentials Flow
+
+The following is how the Grant Type works in this application :
+
+* Request token with header `client_id` and `client_secret` as Basic Authorization and with `client_id` and `grant_type` as parameters.
+
+        curl -X POST -vu clientcred:123456 http://localhost:8080/springmvc-oauth2-example/oauth/token -H "Accept: application/json" -d "client_id=clientcred&grant_type=client_credentials"
+
+* We will get JSON response :
+
+        {
+			"access_token":"67f262cb-55f6-4c60-a49e-ae0ab8a8438c",
+			"token_type":"bearer",
+			"expires_in":43199,
+			"scope":"trust"
+		}
+
+* Access resource with header parameter :
+
+        curl -H "Authorization: Bearer 67f262cb-55f6-4c60-a49e-ae0ab8a8438c" http://localhost:8080/springmvc-oauth2-example/api/client
+
+* If success, will get JSON response :
+
+        {
+            "sukses":true,
+            "page":"client",
+            "user":"clientcred"
+        }        
+
 
 ### References
 * [Spring Security Guides] (http://docs.spring.io/spring-security/site/docs/current/guides/html5/)
