@@ -1,7 +1,6 @@
 package org.arip.springmvc.oauth2.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -11,10 +10,11 @@ import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 /**
  * Created by Arip Hidayat on 12/03/2016.
  */
-@Order(2)
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+
+    public static final String RESOURCE_ID = "arip";
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -30,6 +30,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         tokenService.setClientSecret("123456");
         tokenService.setCheckTokenEndpointUrl("http://localhost:8080/authorization-server/oauth/check_token");
 
-        resources.resourceId(AuthorizationServerConfig.RESOURCE_ID).tokenServices(tokenService);
+        resources.resourceId(RESOURCE_ID).tokenServices(tokenService);
     }
 }

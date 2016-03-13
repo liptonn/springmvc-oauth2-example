@@ -61,7 +61,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .scopes("read", "write")
                 .resourceIds(RESOURCE_ID)
                 .authorities("CLIENT")
-                .redirectUris("http://localhost:8080/authorization-server/api/state/verify")
+                .redirectUris("http://localhost:8081/resource-server/api/state/verify")
                 .accessTokenValiditySeconds(3600)
                 .autoApprove(true);
     }
