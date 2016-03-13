@@ -28,7 +28,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         RemoteTokenServices tokenService = new RemoteTokenServices();
         tokenService.setClientId("jsclient");
         tokenService.setClientSecret("123456");
-        tokenService.setCheckTokenEndpointUrl("http://localhost:8080/springmvc-oauth2-example/oauth/check_token");
+        tokenService.setCheckTokenEndpointUrl("http://localhost:8080/authorization-server/oauth/check_token");
 
         resources.resourceId(AuthorizationServerConfig.RESOURCE_ID).tokenServices(tokenService);
     }

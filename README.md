@@ -60,7 +60,7 @@ The following is how the Grant Type works in this application :
 
 * Request access token : 
 
-        curl -X POST -vu clientapp:123456 http://localhost:8080/springmvc-oauth2-example/oauth/token -H "Accept: application/json" -d "client_id=clientapp&grant_type=password&username=admin&password=passw0rd" 
+        curl -X POST -vu clientapp:123456 http://localhost:8080/authorization-server/oauth/token -H "Accept: application/json" -d "client_id=clientapp&grant_type=password&username=admin&password=passw0rd" 
 
 * `auth-server` will give you JSON response with access token :
 
@@ -73,7 +73,7 @@ The following is how the Grant Type works in this application :
 
 * Access resource with header parameter : 
 
-        curl -H "Authorization: Bearer 9b3456a4-c5db-422e-a422-883a60bf1899" http://localhost:8080/springmvc-oauth2-example/api/admin
+        curl -H "Authorization: Bearer 9b3456a4-c5db-422e-a422-883a60bf1899" http://localhost:8080/authorization-server/api/admin
 
 * `resource-server` will give JSON response :
 
@@ -108,7 +108,7 @@ The following is how the Grant Type works in this application :
 
 * Request token with header `client_id` and `client_secret` as Basic Authorization and with `client_id` and `grant_type` as parameters.
 
-        curl -X POST -vu clientcred:123456 http://localhost:8080/springmvc-oauth2-example/oauth/token -H "Accept: application/json" -d "client_id=clientcred&grant_type=client_credentials"
+        curl -X POST -vu clientcred:123456 http://localhost:8080/authorization-server/oauth/token -H "Accept: application/json" -d "client_id=clientcred&grant_type=client_credentials"
 
 * We will get JSON response :
 
@@ -121,7 +121,7 @@ The following is how the Grant Type works in this application :
 
 * Access resource with header parameter :
 
-        curl -H "Authorization: Bearer 67f262cb-55f6-4c60-a49e-ae0ab8a8438c" http://localhost:8080/springmvc-oauth2-example/api/client
+        curl -H "Authorization: Bearer 67f262cb-55f6-4c60-a49e-ae0ab8a8438c" http://localhost:8080/authorization-server/api/client
 
 * If success, will get JSON response :
 
@@ -184,17 +184,17 @@ The following is how the Grant Type works in this application :
 
 * Call this URL in browser : 
 
-		http://localhost:8080/springmvc-oauth2-example/oauth/authorize?client_id=clientauthcode&response_type=code&redirect_uri=http://localhost:8080/springmvc-oauth2-example/api/state/new
+		http://localhost:8080/authorization-server/oauth/authorize?client_id=clientauthcode&response_type=code&redirect_uri=http://localhost:8080/authorization-server/api/state/new
 
 * You will redirected to login page, login with username=`admin` and password=`passw0rd` and choose approve radio button and click Autorize button.
 
 * You will redirected to redirect uri with parameter code :
 
-        http://localhost:8080/springmvc-oauth2-example/api/state/new?code=CODE
+        http://localhost:8080/authorization-server/api/state/new?code=CODE
 
 * Exchange authorization code with access token with call request :
 
-        curl -X POST -vu clientauthcode:123456 http://localhost:8080/springmvc-oauth2-example/oauth/token -H "Accept: application/json" -d "grant_type=authorization_code&code=CODE&redirect_uri=http://localhost:8080/springmvc-oauth2-example/api/state/new"
+        curl -X POST -vu clientauthcode:123456 http://localhost:8080/authorization-server/oauth/token -H "Accept: application/json" -d "grant_type=authorization_code&code=CODE&redirect_uri=http://localhost:8080/authorization-server/api/state/new"
 
 * We will get JSON response :
 
@@ -208,19 +208,19 @@ The following is how the Grant Type works in this application :
 
 * Take access token to access protection resource, e.g :
 
-        curl http://localhost:8080/springmvc-oauth2-example/api/admin?access_token=08664d93-41e3-473c-b5d2-f2b30afe7053
+        curl http://localhost:8080/authorization-server/api/admin?access_token=08664d93-41e3-473c-b5d2-f2b30afe7053
 
 * In this case, `resource-server` will validation token to authorization :
 
-        curl -X POST -vu clientauthcode:123456 http://localhost:8080/springmvc-oauth2-example/oauth/check_token?token=08664d93-41e3-473c-b5d2-f2b30afe7053
+        curl -X POST -vu clientauthcode:123456 http://localhost:8080/authorization-server/oauth/check_token?token=08664d93-41e3-473c-b5d2-f2b30afe7053
 
 * You will get JSON response :
 
         {
-            "aud": ["belajar"],
+            "aud": ["arip"],
             "exp": 1444158090,
-            "user_name": "endy",
-            "authorities": ["ROLE_OPERATOR", "ROLE_SUPERVISOR"],
+            "user_name": "admin",
+            "authorities": "ADMIN",
             "client_id": "clientauthcode",
             "scope": ["read", "write"]
         }
@@ -236,7 +236,7 @@ The following is how the Grant Type works in this application :
 
 * If access token expired, you can request refresh token :
 
-        curl -X POST -vu clientauthcode:123456 http://localhost:8080/springmvc-oauth2-example/oauth/token -d "client_id=clientauthcode&grant_type=refresh_token&refresh_token=436761f1-2f26-412b-ab0f-bbf2cd7459c4"
+        curl -X POST -vu clientauthcode:123456 http://localhost:8080/authorization-server/oauth/token -d "client_id=clientauthcode&grant_type=refresh_token&refresh_token=436761f1-2f26-412b-ab0f-bbf2cd7459c4"
 
 * `auth-server` will give you JSON response and new access token :
 
@@ -308,26 +308,26 @@ The following is how the Grant Type works in this application :
 
 * Generate random `state` variable :
 
-        curl http://localhost:8080/springmvc-oauth2-example/api/state/new
+        curl http://localhost:8080/authorization-server/api/state/new
     This state variable will be save as session attribute in server, we will use it for verification in next step.
 
 * Generate token with `state` variable :
 
-        curl http://localhost:8080/springmvc-oauth2-example/oauth/authorize?client_id=jsclient&response_type=token&scope=write&state=STATE
+        curl http://localhost:8080/authorization-server/oauth/authorize?client_id=jsclient&response_type=token&scope=write&state=STATE
 
 * `auth-server` will redirected to login page.
 * Login with username=`admin` and password=`passw0rd`
-* After success login, `auth-server` will redirected to URL `http://localhost:8080/springmvc-oauth2-example/api/state/verify` with additinal hash token :
+* After success login, `auth-server` will redirected to URL `http://localhost:8080/authorization-server/api/state/verify` with additinal hash token :
     
-	`http://localhost:8080/springmvc-oauth2-example/api/state/verify#access_token=fdd3ed9d-f378-406b-9d23-13b36aad5128&token_type=bearer&state=d6b63cdb-bbf0-4232-b3a2-5855c1b12b1d&expires_in=86399`
+	`http://localhost:8080/authorization-server/api/state/verify#access_token=fdd3ed9d-f378-406b-9d23-13b36aad5128&token_type=bearer&state=d6b63cdb-bbf0-4232-b3a2-5855c1b12b1d&expires_in=86399`
 
 * Access protected resource :
 
-        curl http://localhost:8080/springmvc-oauth2-example/api/admin?access_token=fdd3ed9d-f378-406b-9d23-13b36aad5128
+        curl http://localhost:8080/authorization-server/api/admin?access_token=fdd3ed9d-f378-406b-9d23-13b36aad5128
 	
 	And You can access it with header parameter as `Authorization` :
 
-        curl -H "Authorization: Bearer 667aadee-883c-439f-9f18-50ef77e3fad6" http://localhost:8080/springmvc-oauth2-example/api/admin
+        curl -H "Authorization: Bearer 667aadee-883c-439f-9f18-50ef77e3fad6" http://localhost:8080/authorization-server/api/admin
 
 
 ### References
