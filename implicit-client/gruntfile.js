@@ -38,6 +38,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-wiredep');
 
-  grunt.registerTask('default', ['connect', 'watch', 'wiredep']);
+  grunt.registerTask('default', ['wiredep', 'connect', 'watch']);
 
 }; //wrapper function
