@@ -8,12 +8,6 @@ module.exports = function(grunt) {
       }
     },
 
-    bower_concat: {
-      all: {
-        dest: 'src/main/js/_bower.js'
-      }
-    },
-
     connect: {
       sever: {
         options: {
@@ -43,8 +37,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-wiredep');
-  grunt.loadNpmTasks('grunt-bower-concat');
 
-  grunt.registerTask('default', ['bower_concat', 'wiredep', 'connect', 'watch']);
+  grunt.registerTask('default', ['wiredep', 'connect', 'watch']);
 
 }; //wrapper function
