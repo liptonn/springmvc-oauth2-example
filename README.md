@@ -13,14 +13,24 @@ and also to have multiple Resource Services that share an Authorization Service.
 The requests for the tokens are handled by Spring MVC controller endpoints, and access to 
 protected resources is handled by standard Spring Security request filters. 
 
-### Prerequisite :
+### Prerequisite for run `authorization-server` and `resource-server`:
 * Installed Maven Project environment
+
+### Prerequisite for run `implicit-client`
+* Installed [Node.js] (https://nodejs.org) and [npm] (https://www.npmjs.com/)
+* Installed [bower-cli] (http://bower.io/)
 
 ### Build and Run :
 
-* Run application :
+* Run `authorization-server` and `resource-server` application :
 
-    	mvn clean tomcat7:run
+    	execute `mvn clean tomcat7:run`
+
+* Run `implicit-client` application, execute the following command :
+
+        - execute `npm install`
+        - execute `bower install`
+        - execute `grunt`
 		
 		
 ### Grant Type : Resource Owner Password Credentials

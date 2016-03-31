@@ -7,12 +7,24 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
-    <script src="js/app.js"></script>
+<body ng-app="aplikasiOauthClient">
     <!-- bower:js -->
     <script src="js/vendor/angular/angular.js"></script>
     <!-- endbower -->
+    <script src="js/app.js"></script>
     <h3>Spring MVC Security OAuth2 Example (Client of Implicit Grant Type)</h3>
+    <div ng-controller="NavCtrl">
+        <a ng-click="logout()" href="http://localhost:10000/auth-server/j_spring_security_logout?token={{token}}&redirect={{authUrl}}">Logout</a>
+    </div>
+    <div>
+        <div ng-controller="OauthCtrl">
+            Access Token : {{accessToken}}
+            <br> User : {{currentUser}}
+            <br>
+            <button ng-click="adminApi()">Admin API</button>{{adminOutput}}
+            <button ng-click="staffApi()">Staff API</button>{{staffOutput}}
+        </div>
+    </div>
 </body>
 
 </html>
