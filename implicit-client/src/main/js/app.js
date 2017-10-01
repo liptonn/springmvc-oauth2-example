@@ -3,7 +3,12 @@
 var app = angular.module('aplikasiOauthClient', []);
 
 app.config(function($locationProvider) {
-    $locationProvider.html5Mode(true);
+    //$locationProvider.html5Mode(true);
+//         $locationProvider.html5Mode({
+//   enabled: true,
+//   requireBase: true
+// });
+
 });
 
 app.controller('NavCtrl', function($scope, $window, $location, $http) {
@@ -18,6 +23,7 @@ app.controller('NavCtrl', function($scope, $window, $location, $http) {
     $scope.getTokenFromUrl = function() {
         var token;
         var hashParams = $location.hash();
+         console.log($window.location.href);
         if (!hashParams) {
             console.log("No token in URL");
             return;
@@ -65,14 +71,25 @@ app.controller('OauthCtrl', function($scope, $http, $window) {
         }
 
         //call Admin API
-        $http.get('http://localhost:8081/resource-server/api/admin?access_token=' + $scope.accessToken)
-            .success(function(data) {
+        // $http.get('http://localhost:8081/resource-server/api/admin?access_token=' + $scope.accessToken)
+        //     .success(function(data) {
+        //         $scope.adminOutput = data;
+        //         $scope.currentUser = data.user;
+        //     }).error(function(data, status) {
+        //         console.log("Error : " + status + " - " + data);
+        //         $scope.adminOutput = data;
+        //     });
+
+  $http.get('http://localhost:8081/resource-server/api/admin?access_token=' + $scope.accessToken)
+            .then(function(data) {
                 $scope.adminOutput = data;
                 $scope.currentUser = data.user;
-            }).error(function(data, status) {
+            },
+            function(data, status) {
                 console.log("Error : " + status + " - " + data);
                 $scope.adminOutput = data;
-            });
+            }
+            );
     };
 
     $scope.staffApi = function() {
@@ -82,13 +99,24 @@ app.controller('OauthCtrl', function($scope, $http, $window) {
         }
 
         //call Staff API
+        // $http.get('http://localhost:8081/resource-server/api/staff?access_token=' + $scope.accessToken)
+        //     .success(function(data) {
+        //         $scope.staffOutput = data;
+        //         $scope.currentUser = data.user;
+        //     }).error(function(data, status) {
+        //         console.log("Error : " + status + " - " + data);
+        //         $scope.staffOutput = data;
+        //     });
         $http.get('http://localhost:8081/resource-server/api/staff?access_token=' + $scope.accessToken)
-            .success(function(data) {
+            .then(function(data) {
                 $scope.staffOutput = data;
                 $scope.currentUser = data.user;
-            }).error(function(data, status) {
+            },
+            function(data, status) {
                 console.log("Error : " + status + " - " + data);
                 $scope.staffOutput = data;
-            });
+            }
+            );
+
     };
 });
